@@ -1,0 +1,18 @@
+# Java
+target/
+*.class
+*.jar
+
+# React / Vite
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Logs
+*.log
