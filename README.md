@@ -24,7 +24,7 @@ publish a new job, and delete an existing job through a clean, focused interface
 | Frontend | React 19, Vite, CSS |
 | Backend | Java 25, Spring Boot 4.1 |
 | API | Spring Web MVC, REST, JSON |
-| Data | In-memory Java `ArrayList` |
+| Data | Spring Data JPA, Hibernate, PostgreSQL |
 | Build tools | Maven, npm |
 
 ## REST API
@@ -65,7 +65,7 @@ Vite development proxy
 Spring Boot REST API (localhost:8080)
         │
         ▼
-JobService → JobRepo → in-memory job list
+JobService → Spring Data JPA repository → PostgreSQL
 ```
 
 The frontend calls `/api/...`. During local development, Vite forwards those
@@ -81,8 +81,22 @@ requests to the Spring Boot server and removes the `/api` prefix. For example:
 
 - Java 25
 - Node.js 18 or newer
+- PostgreSQL with a database named `company_db`
 
-### 1. Start the backend
+### 1. Configure PostgreSQL
+
+Create the local database:
+
+```sql
+CREATE DATABASE company_db;
+```
+
+The connection is configured in `src/main/resources/application.properties`.
+Update `spring.datasource.username` and `spring.datasource.password` there to
+match your local PostgreSQL account. Hibernate automatically creates or updates
+the required tables because `spring.jpa.hibernate.ddl-auto=update` is enabled.
+
+### 2. Start the backend
 
 From the project root:
 
@@ -92,7 +106,7 @@ From the project root:
 
 The REST API will run at `http://localhost:8080`.
 
-### 2. Start the frontend
+### 3. Start the frontend
 
 Open another terminal:
 
@@ -141,8 +155,8 @@ spring-boot-rest/
 └── pom.xml
 ```
 
-## Note about persistence
+## Persistence
 
-Jobs are currently stored in an in-memory `ArrayList`. Changes remain available
-while the backend is running and reset when the Spring Boot application restarts.
-A database such as PostgreSQL or MySQL can be added later for permanent storage.
+Job posts are mapped as JPA entities and stored permanently in PostgreSQL.
+`JobRepo` extends `JpaRepository`, providing the CRUD database operations used by
+the service layer.

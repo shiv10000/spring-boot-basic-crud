@@ -2,7 +2,10 @@
 
 ## Run locally
 
-Start the Spring Boot API from the repository root:
+Before starting the frontend, create and configure the PostgreSQL database as
+described in the [project README](../README.md#1-configure-postgresql).
+
+Then start the Spring Boot API from the repository root:
 
 ```bash
 ./mvnw spring-boot:run
